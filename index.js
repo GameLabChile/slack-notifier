@@ -1,5 +1,5 @@
-const startedGamesWebhookUrl = 'https://hooks.slack.com/services/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'
-const testWebhookUrl = 'https://hooks.slack.com/services/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'
+const startedGamesWebhookUrl = 'https://hooks.slack.com/services/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'
+const testWebhookUrl = 'https://hooks.slack.com/services/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'
 
 /**
  * @param {Object} params
