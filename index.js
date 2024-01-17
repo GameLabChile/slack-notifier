@@ -1,5 +1,4 @@
-const startedGamesWebhookUrl = 'https://hooks.slack.com/services/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'
-const testWebhookUrl = 'https://hooks.slack.com/services/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'
+import { startedGamesWebhookUrl, testWebhookUrl } from './webHooksUrls.js'
 
 /**
  * @param {Object} params
