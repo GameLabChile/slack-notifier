@@ -35,11 +35,12 @@ export default class SlackNotificationService {
     return this.sendSlackNotification({ body: message, url: this.INTEGRATION_SLACK_CHANNEL_NOTIFICATION })
   }
 
-  static basicSupportRequest ({ userFullName, email, body, origin }) {
-    const message = `Requerimiento de soporte en Startup Journey (${origin}).
+  static basicSupportRequest ({ userFullName, email, body, origin, fileUrl }) {
+    let message = `Requerimiento de soporte en Startup Journey (${origin}).
 Usuario: ${userFullName}
 Email: ${email}
 Mensaje: ${body}`
+    if (fileUrl) message += `\nArchivo adjunto: ${fileUrl}`
     return this.sendSlackNotification({ body: message, url: this.SUPPORT_SLACK_CHANNEL_URL })
   }
 
@@ -73,6 +74,8 @@ Fin: ${new Date(endDate).toUTCString()}`
   }
 
   static sendSlackNotification ({ body, url }) {
+    console.log({ body, url })
+
     return HTTP.post(url, { data: { text: body } })
   }
 }
