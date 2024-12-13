@@ -1,30 +1,17 @@
+const TEST_SLACK_CHANNEL_NOTIFICATION = process.env.TEST_SLACK_CHANNEL_NOTIFICATION
+const {
+  INTEGRATION_SLACK_CHANNEL_NOTIFICATION = TEST_SLACK_CHANNEL_NOTIFICATION,
+  SUPPORT_SLACK_CHANNEL_URL = TEST_SLACK_CHANNEL_NOTIFICATION,
+  GAMES_NOTIFICATIONS = TEST_SLACK_CHANNEL_NOTIFICATION
+} = process.env
+
 export default class SlackNotificationService {
-  static defaultTestUrl = process.env.TEST_SLACK_CHANNEL_NOTIFICATION
-
-  static get INTEGRATION_SLACK_CHANNEL_NOTIFICATION () {
-    const url = process.env.INTEGRATION_SLACK_CHANNEL_NOTIFICATION || this.defaultTestUrl
-    if (!url) throw new Error('INTEGRATION_SLACK_CHANNEL_NOTIFICATION env not setted')
-    return url
-  }
-
-  static get SUPPORT_SLACK_CHANNEL_URL () {
-    const url = process.env.SUPPORT_SLACK_CHANNEL_URL || this.defaultTestUrl
-    if (!url) throw new Error('SUPPORT_SLACK_CHANNEL_URL env not setted')
-    return url
-  }
-
-  static get GAMES_NOTIFICATIONS () {
-    const url = process.env.GAMES_NOTIFICATIONS || this.defaultTestUrl
-    if (!url) throw new Error('GAMES_NOTIFICATIONS env not setted')
-    return url
-  }
-
   static newProfessor ({ professorFullName, professorInstitution, distributorName }) {
     const message = `*Nuevo profesor registrado por distribuidor (\`sjg\`):*
   - *Nombre:* ${professorFullName}
   - *Institución:* ${professorInstitution || 'No proporcionada'}
   - *Distribuidor:* ${distributorName}`
-    return this.sendSlackNotification({ body: message, url: this.INTEGRATION_SLACK_CHANNEL_NOTIFICATION })
+    return this.sendSlackNotification({ body: message, url: INTEGRATION_SLACK_CHANNEL_NOTIFICATION })
   }
 
   static newCourse ({ courseName, professorId, professorFullName, distributorName }) {
@@ -32,7 +19,7 @@ export default class SlackNotificationService {
   - *Nombre:* ${courseName}
   - *Profesor:* ${professorFullName} (${professorId})
   - *Distribuidor:* ${distributorName}`
-    return this.sendSlackNotification({ body: message, url: this.INTEGRATION_SLACK_CHANNEL_NOTIFICATION })
+    return this.sendSlackNotification({ body: message, url: INTEGRATION_SLACK_CHANNEL_NOTIFICATION })
   }
 
   static basicSupportRequest ({ userFullName, email, body, origin, fileUrl }) {
@@ -41,7 +28,7 @@ Usuario: ${userFullName}
 Email: ${email}
 Mensaje: ${body}`
     if (fileUrl) message += `\nArchivo adjunto: ${fileUrl}`
-    return this.sendSlackNotification({ body: message, url: this.SUPPORT_SLACK_CHANNEL_URL })
+    return this.sendSlackNotification({ body: message, url: SUPPORT_SLACK_CHANNEL_URL })
   }
 
   static scheduleSupportMessage ({ userFullName, email, startDate, endDate, origin }) {
@@ -50,7 +37,7 @@ Usuario: ${userFullName}
 Email: ${email}
 Inicio: ${new Date(startDate).toUTCString()}
 Fin: ${new Date(endDate).toUTCString()}`
-    return this.sendSlackNotification({ body: message, url: this.SUPPORT_SLACK_CHANNEL_URL })
+    return this.sendSlackNotification({ body: message, url: SUPPORT_SLACK_CHANNEL_URL })
   }
 
   static sendStartedGameSlack ({ profName, profLastName, profEmail, game, gameName, host, playersCount, groupsCount }) {
@@ -61,7 +48,7 @@ Fin: ${new Date(endDate).toUTCString()}`
   Cantidad de jugadores: ${playersCount}
   Cantidad de grupos: ${groupsCount}
   `
-    this.sendSlackNotification({ body: message, url: this.GAMES_NOTIFICATIONS })
+    this.sendSlackNotification({ body: message, url: GAMES_NOTIFICATIONS })
   }
 
   static sendNewHWSlack ({ profName, profLastName, profEmail, game, homeWorkName, host }) {
@@ -70,12 +57,11 @@ Fin: ${new Date(endDate).toUTCString()}`
   Plataforma: ${game} - ${host}
   HW: ${homeWorkName} - ${new Date().toUTCString()} (UTC)
   `
-    this.sendSlackNotification({ body: message, url: this.GAMES_NOTIFICATIONS })
+    this.sendSlackNotification({ body: message, url: GAMES_NOTIFICATIONS })
   }
 
   static sendSlackNotification ({ body, url }) {
-    console.log({ body, url })
-
+    if (!url) throw new Error('Slack notification url not provided')
     return HTTP.post(url, { data: { text: body } })
   }
 }
