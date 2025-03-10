@@ -41,22 +41,12 @@ Fin: ${new Date(endDate).toUTCString()}`
   }
 
   static sendStartedGameSlack ({ profName, profLastName, profEmail, game, gameName, host, playersCount, groupsCount }) {
-    const message = `Se ha iniciado una nueva partida en *${game}*
-  Profesor: ${profName} ${profLastName} - ${profEmail}
-  Plataforma: ${game} - ${host}
-  Partida: ${gameName} - ${new Date().toUTCString()} (UTC)
-  Cantidad de jugadores: ${playersCount}
-  Cantidad de grupos: ${groupsCount}
-  `
+    const message = `:mega: ${host} ${profEmail} | ${groupsCount} grupos | ${playersCount} players`
     this.sendSlackNotification({ body: message, url: GAMES_NOTIFICATIONS })
   }
 
   static sendNewHWSlack ({ profName, profLastName, profEmail, game, homeWorkName, host }) {
-    const message = `Se ha creado un nuevo HW en *${game}*
-  Profesor: ${profName} ${profLastName} - ${profEmail}
-  Plataforma: ${game} - ${host}
-  HW: ${homeWorkName} - ${new Date().toUTCString()} (UTC)
-  `
+    const message = `:page_with_curl: ${host} ${profEmail} | Homework: ${homeWorkName} `
     this.sendSlackNotification({ body: message, url: GAMES_NOTIFICATIONS })
   }
 
